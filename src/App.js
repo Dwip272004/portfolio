@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Skills from './components/Skills';
 import ScrollToTopHandler from './components/ScrollToTopHandler';
 import About from './components/About';
+import Projects from './components/Projects';
 
 function App() {
   const [unlockScroll, setUnlockScroll] = useState(false);
@@ -16,6 +17,7 @@ function App() {
       <Hero unlockScroll={unlockScroll} setUnlockScroll={setUnlockScroll} />
       <Skills />
       <About />
+      <Projects />
     </div>
   );
 }
