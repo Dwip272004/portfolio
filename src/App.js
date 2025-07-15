@@ -1,23 +1,27 @@
-// App.jsx
 import React, { useState } from 'react';
-import Hero from './components/Hero';
+import './App.css';
 import Navbar from './components/Navbar';
+import Hero from './components/Hero';
 import Skills from './components/Skills';
-import ScrollToTopHandler from './components/ScrollToTopHandler';
 import About from './components/About';
 import Projects from './components/Projects';
+import Footer from './components/Footer';
 
 function App() {
-  const [unlockScroll, setUnlockScroll] = useState(false);
+  const [unlockScroll, setUnlockScroll] = useState(false); // ✅ Declare the state here
 
   return (
-    <div className="w-full min-h-screen overflow-hidden">
+    <div className="w-full min-h-screen overflow-x-hidden">
+      {/* ✅ Pass setUnlockScroll to Navbar */}
       <Navbar setUnlockScroll={setUnlockScroll} />
-      <ScrollToTopHandler />
+      
+      {/* ✅ Pass unlockScroll + setter to Hero */}
       <Hero unlockScroll={unlockScroll} setUnlockScroll={setUnlockScroll} />
-      <Skills />
+      
       <About />
+      <Skills />
       <Projects />
+      <Footer />
     </div>
   );
 }

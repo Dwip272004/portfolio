@@ -1,30 +1,13 @@
-import React, { useEffect } from 'react';
-import Threads from '../Backgrounds/Threads/Threads';
+import React, { lazy, Suspense } from 'react';
 
-export default function Hero({ unlockScroll, setUnlockScroll }) {
-  useEffect(() => {
-    // Lock scroll only on initial mount
-    if (!unlockScroll) {
-      document.body.style.overflow = 'hidden';
-    }
+const Threads = lazy(() => import('../Backgrounds/Threads/Threads'));
 
-    // Cleanup on unmount
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [unlockScroll]); // ✅ Add dependency to avoid warning
-
+export default function Hero({ setUnlockScroll }) {
   const handleUnlock = () => {
-    document.body.style.overflow = 'auto';
     setUnlockScroll(true);
-
-    // Smooth scroll to skills section
-    setTimeout(() => {
-      const skillsSection = document.getElementById('skills');
-      if (skillsSection) {
-        skillsSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 200);
+    requestAnimationFrame(() => {
+      document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
+    });
   };
 
   return (
@@ -32,15 +15,17 @@ export default function Hero({ unlockScroll, setUnlockScroll }) {
       id="hero"
       className="relative w-full min-h-screen overflow-hidden text-white bg-[rgb(6,0,16)]"
     >
-      {/* Threads Background */}
-      <div className="absolute inset-0 z-0">
-        <Threads
-          amplitude={2}
-          distance={0.5}
-          enableMouseInteraction={true}
-          speed={1.2}
-        />
-      </div>
+      {/* Background Threads without mouse interaction */}
+      <Suspense fallback={<div className="w-full h-full bg-[rgb(6,0,16)]" />}>
+        <div className="absolute inset-0 z-0">
+          <Threads
+            amplitude={1.5}
+            distance={0.4}
+            enableMouseInteraction={false} // <-- disables mouse effect
+            speed={1}
+          />
+        </div>
+      </Suspense>
 
       {/* Hero Content */}
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 text-center">
@@ -50,7 +35,6 @@ export default function Hero({ unlockScroll, setUnlockScroll }) {
         <p className="mt-5 text-base sm:text-lg md:text-xl max-w-3xl text-gray-100 font-medium">
           An innovative engineering student dedicated to building impactful solutions and immersive digital experiences.
         </p>
-
         <div className="mt-10 flex flex-wrap justify-center gap-4 sm:gap-6">
           <button
             onClick={handleUnlock}
